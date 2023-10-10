@@ -19,6 +19,45 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, username, password, **extra_fields)
 
 
+
+class MyUser(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=125, unique=True)
+    email = models.EmailField(unique=True)
+    date_of_birth = models.DateField()
+    gender = models.CharField(
+        max_length=20,
+        choices=(
+            ('man', 'Муж'),
+            ('woman', 'Жен'),
+            ('another', 'walmart bug'),
+        ),
+        default='another'
+    )
+    is_admin = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'date_of_birth']
+
+
+    def has_perm(self, perm, obj=None):
+        """Does the user have a specific permission?"""
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        """Does the user have permissions to view the app `app_label`?"""
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        """Is the user a member of staff?"""
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
+
+
+
 class Genre(models.Model):
     name = models.CharField(max_length=255)
 
