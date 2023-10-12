@@ -2,6 +2,21 @@ from rest_framework import generics
 from .models import Genre, Actor, Movie, Review
 from .serializers import GenreSerializer, ActorSerializer, MovieSerializer, ReviewSerializer
 from rest_framework.pagination import PageNumberPagination
+import django_filters
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+class MovieFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(lookup_expr='icontains')  # Фильтр для названия с учетом регистра
+    genres = django_filters.ModelMultipleChoiceFilter(
+        field_name='genres__name',
+        to_field_name='name',
+        queryset=Genre.objects.all(),
+    )  # Фильтр для жанров
+
+    class Meta:
+        model = Movie
+        fields = ['title', 'release_date']
 
 
 class GenreListCreateView(generics.ListCreateAPIView):
@@ -29,6 +44,8 @@ class ActorDetailView(generics.RetrieveUpdateDestroyAPIView):
 class MovieListCreateView(generics.ListCreateAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+    filter_backends = [DjangoFilterBackend]  # Добавляем фильтрацию
+    filterset_class = MovieFilter  # Указываем класс фильтра
     pagination_class = PageNumberPagination
 
 

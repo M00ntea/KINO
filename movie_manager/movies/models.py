@@ -18,6 +18,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, username, password, **extra_fields)
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=125, unique=True)
@@ -52,16 +53,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         help_text='Specific permissions for this user.',
     )
 
+    def __str__(self):
+        return self.name
 
 
 class Genre(models.Model):
     name = models.CharField(max_length=255)
 
-
+    def __str__(self):
+        return self.name
 
 
 class Actor(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 
 class Movie(models.Model):
@@ -72,9 +79,16 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre)
     actors = models.ManyToManyField(Actor)
 
+    def __str__(self):
+        return self.title
+
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     rating = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.author.username}'s Review of {self.movie.title}" #  Представление отзыва будет\
+        # "Имя пользователя's Review of Название фильма"
