@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 class CustomUserManager(BaseUserManager):
@@ -20,49 +20,18 @@ class CustomUserManager(BaseUserManager):
 
 
 
-class MyUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=125, unique=True)
-    email = models.EmailField(unique=True)
-    date_of_birth = models.DateField()
-    gender = models.CharField(
-        max_length=20,
-        choices=(
-            ('man', 'Муж'),
-            ('woman', 'Жен'),
-            ('another', 'walmart bug'),
-        ),
-        default='another'
-    )
-    is_admin = models.BooleanField(default=False)
-
-    objects = CustomUserManager()
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'date_of_birth']
-
-
-    def has_perm(self, perm, obj=None):
-        """Does the user have a specific permission?"""
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        """Does the user have permissions to view the app `app_label`?"""
-        # Simplest possible answer: Yes, always
-        return True
-
     @property
     def is_staff(self):
-        """Is the user a member of staff?"""
-        # Simplest possible answer: All admins are staff
         return self.is_admin
-
 
 
 class Genre(models.Model):
     name = models.CharField(max_length=255)
 
+
 class Actor(models.Model):
     name = models.CharField(max_length=255)
+
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)
@@ -71,13 +40,9 @@ class Movie(models.Model):
     genres = models.ManyToManyField(Genre)
     actors = models.ManyToManyField(Actor)
 
+
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     author = models.CharField(max_length=255)
     content = models.TextField()
     rating = models.PositiveIntegerField()
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-

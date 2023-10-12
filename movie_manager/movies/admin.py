@@ -7,3 +7,4 @@ admin.site.register(Movie)
 admin.site.register(Review)
 
 
+
