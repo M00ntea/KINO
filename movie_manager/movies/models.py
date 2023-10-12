@@ -58,16 +58,19 @@ class Genre(models.Model):
     name = models.CharField(max_length=255)
 
 
+
+
 class Actor(models.Model):
     name = models.CharField(max_length=255)
 
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)
+    cover_image = models.ImageField(upload_to='movie_covers/', null=True, blank=True)
     release_date = models.DateField()
     description = models.TextField()
-    genres = models.ManyToManyField(Genre)
-    actors = models.ManyToManyField(Actor)
+    genres = models.ManyToManyField(Genre, blank=True, null=True)
+    actors = models.ManyToManyField(Actor, blank=True, null=True)
 
 
 class Review(models.Model):
