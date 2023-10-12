@@ -69,8 +69,8 @@ class Movie(models.Model):
     cover_image = models.ImageField(upload_to='movie_covers/', null=True, blank=True)
     release_date = models.DateField()
     description = models.TextField()
-    genres = models.ManyToManyField(Genre, blank=True, null=True)
-    actors = models.ManyToManyField(Actor, blank=True, null=True)
+    genres = models.ManyToManyField(Genre)
+    actors = models.ManyToManyField(Actor)
 
 
 class Review(models.Model):
