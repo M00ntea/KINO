@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Permission, Group
 
 
 class CustomUserManager(BaseUserManager):
@@ -18,11 +18,40 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, username, password, **extra_fields)
 
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=125, unique=True)
+    date_of_birth = models.DateField()
+    gender = models.CharField(
+        max_length=20,
+        choices=(
+            ('man', 'Муж'),
+            ('woman', 'Жен'),
+            ('another', 'walmart bug'),
+        ),
+        default='another'
+    )
 
+    objects = CustomUserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'date_of_birth']
 
-    @property
-    def is_staff(self):
-        return self.is_admin
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_set',
+        blank=True,
+        verbose_name='groups',
+        help_text='The groups this user belongs to.',
+    )
+
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_set',
+        blank=True,
+        verbose_name='user permissions',
+        help_text='Specific permissions for this user.',
+    )
+
 
 
 class Genre(models.Model):
