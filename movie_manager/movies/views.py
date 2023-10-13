@@ -54,6 +54,12 @@ class MovieDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MovieSerializer
 
 
+class MovieListCreateView(generics.ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    pagination_class = PageNumberPagination
+
+
 class ReviewListCreateView(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
@@ -63,5 +69,3 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
-
