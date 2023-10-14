@@ -1,6 +1,10 @@
-from rest_framework import generics
-from .models import Genre, Actor, Movie, Review
-from .serializers import GenreSerializer, ActorSerializer, MovieSerializer, ReviewSerializer
+from rest_framework import generics, filters
+from .models import Genre, Actor, Movie, Review, CustomUser
+from .serializers import (
+    GenreSerializer, ActorSerializer,
+    MovieSerializer, ReviewSerializer,
+    CustomUserRegistrationSerializer
+)
 from rest_framework.pagination import PageNumberPagination
 import django_filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -41,12 +45,15 @@ class ActorDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ActorSerializer
 
 
+
 class MovieListCreateView(generics.ListCreateAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
-    filter_backends = [DjangoFilterBackend]  # Добавляем фильтрацию
-    filterset_class = MovieFilter  # Указываем класс фильтра
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_class = MovieFilter
+    search_fields = ['title']  # Указываем поля для поиска
     pagination_class = PageNumberPagination
+
 
 
 class MovieDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -69,3 +76,8 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+
+class CustomUserRegistrationView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserRegistrationSerializer
