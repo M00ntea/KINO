@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Permission, Group
 
@@ -71,8 +72,6 @@ class Actor(models.Model):
         return self.name
 
 
-
-
 class Movie(models.Model):
     title = models.CharField(max_length=255)
     cover_image = models.ImageField(upload_to='movie_covers/', null=True, blank=True)
@@ -89,7 +88,8 @@ class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
-    rating = models.PositiveIntegerField()
+    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+
 
     def __str__(self):
         return f"{self.author.username}'s Review of {self.movie.title}"

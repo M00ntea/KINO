@@ -13,7 +13,6 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-
 urlpatterns = [
     path('genres/', GenreListCreateView.as_view(), name='genre-list'),
     path('genres/<int:pk>/', GenreDetailView.as_view(), name='genre-detail'),
@@ -33,3 +32,4 @@ urlpatterns = [
 
     path('register/', CustomUserRegistrationView.as_view(), name='user-registration'),
 ]
+
