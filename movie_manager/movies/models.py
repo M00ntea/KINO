@@ -54,7 +54,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
 
     def __str__(self):
-        return self.name
+        return self.username
 
 
 class Genre(models.Model):
@@ -69,6 +69,8 @@ class Actor(models.Model):
 
     def __str__(self):
         return self.name
+
+
 
 
 class Movie(models.Model):
@@ -90,5 +92,4 @@ class Review(models.Model):
     rating = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.author.username}'s Review of {self.movie.title}" #  Представление отзыва будет\
-        # "Имя пользователя's Review of Название фильма"
+        return f"{self.author.username}'s Review of {self.movie.title}"
