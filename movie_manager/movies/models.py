@@ -29,7 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         choices=(
             ('man', 'Муж'),
             ('woman', 'Жен'),
-            ('another', 'walmart bug'),
+            ('another', 'walmart bag'),
         ),
         default='another'
     )
