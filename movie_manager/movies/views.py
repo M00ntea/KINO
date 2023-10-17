@@ -3,7 +3,7 @@ from .models import Genre, Actor, Movie, Review, CustomUser
 from .serializers import (
     GenreSerializer, ActorSerializer,
     MovieSerializer, ReviewSerializer,
-    CustomUserRegistrationSerializer
+    CustomUserRegistrationSerializer, UserRegisterSerializer, UserSerializer
 )
 from rest_framework.pagination import PageNumberPagination
 import django_filters
@@ -45,7 +45,6 @@ class ActorDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ActorSerializer
 
 
-
 class MovieListCreateView(generics.ListCreateAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
@@ -53,7 +52,6 @@ class MovieListCreateView(generics.ListCreateAPIView):
     filterset_class = MovieFilter
     search_fields = ['title']  # Указываем поля для поиска
     pagination_class = PageNumberPagination
-
 
 
 class MovieDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -81,3 +79,15 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CustomUserRegistrationView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserRegistrationSerializer
+
+
+class UserRegisterView(generics.CreateAPIView):
+    serializer_class = UserRegisterSerializer
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
+
+
+

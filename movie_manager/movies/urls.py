@@ -5,7 +5,7 @@ from .views import (
     ActorListCreateView, ActorDetailView,
     MovieListCreateView, MovieDetailView,
     ReviewListCreateView, ReviewDetailView,
-    CustomUserRegistrationView,
+    CustomUserRegistrationView, UserRegisterView, UserDetailView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -30,6 +30,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
-    path('register/', CustomUserRegistrationView.as_view(), name='user-registration'),
+    path('register/', UserRegisterView.as_view(), name='user-register'),
+    path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
 ]
 
